@@ -400,6 +400,9 @@ public class ReactVideoView extends ScalableVideoView implements MediaPlayer.OnP
         this.mUseNativeControls = controls;
     }
 
+    public void hideControl() {
+        mediaController.hide();
+    }
 
     @Override
     public void onPrepared(MediaPlayer mp) {

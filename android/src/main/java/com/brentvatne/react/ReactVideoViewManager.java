@@ -1,7 +1,9 @@
 package com.brentvatne.react;
 
 import com.brentvatne.react.ReactVideoView.Events;
+import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
@@ -17,6 +19,8 @@ import java.util.Map;
 public class ReactVideoViewManager extends SimpleViewManager<ReactVideoView> {
 
     public static final String REACT_CLASS = "RCTVideo";
+
+    public static final int COMMAND_HIDE_CONTROL = 1;
 
     public static final String PROP_SRC = "src";
     public static final String PROP_SRC_URI = "uri";
@@ -71,6 +75,32 @@ public class ReactVideoViewManager extends SimpleViewManager<ReactVideoView> {
                 "ScaleAspectFit", Integer.toString(ScalableType.FIT_CENTER.ordinal()),
                 "ScaleAspectFill", Integer.toString(ScalableType.CENTER_CROP.ordinal())
         );
+    }
+
+    @Override
+    public Map<String,Integer> getCommandsMap() {
+        return MapBuilder.of(
+                "hideControl", COMMAND_HIDE_CONTROL);
+    }
+
+    @Override
+    public void receiveCommand(
+            ReactVideoView view,
+            int commandType,
+            @Nullable ReadableArray args) {
+        Assertions.assertNotNull(view);
+        Assertions.assertNotNull(args);
+        switch (commandType) {
+            case COMMAND_HIDE_CONTROL: {
+                view.hideControl();
+                return;
+            }
+            default:
+                throw new IllegalArgumentException(String.format(
+                        "Unsupported command %d received by %s.",
+                        commandType,
+                        getClass().getSimpleName()));
+        }
     }
 
     @ReactProp(name = PROP_SRC)
