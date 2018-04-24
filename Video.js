@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet, requireNativeComponent, NativeModules, View, ViewPropTypes, Image} from 'react-native';
+import ReactNative, {StyleSheet, requireNativeComponent, NativeModules, View, ViewPropTypes, Image, UIManager, Platform} from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 import VideoResizeMode from './VideoResizeMode.js';
 
@@ -18,6 +18,16 @@ export default class Video extends Component {
     this.state = {
       showPoster: true,
     };
+  }
+
+  hideControlOnAndroid() {
+    if (Platform.OS !=='android') return;
+
+    UIManager.dispatchViewManagerCommand(
+      ReactNative.findNodeHandle(this),
+      UIManager.RCTVideo.Commands.hideControl,
+      [],
+    );
   }
 
   setNativeProps(nativeProps) {
